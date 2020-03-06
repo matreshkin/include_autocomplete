@@ -51,11 +51,14 @@ class IncludeAutoComplete(sublime_plugin.EventListener):
 
     def get_include_locations_from_project_data(self):
         result = []
-        incl_settings = DEF_INCL_SETTINGS
         project_data = sublime.active_window().project_data()
         if project_data:
-            incl_settings = project_data.get(STR_INCL_SETTINGS, DEF_INCL_SETTINGS)
-        incl_locations = incl_settings.get(STR_INCL_SETTING_INCL_LOC, DEF_INCL_SETTING_INCL_LOC)
+            incl_settings = project_data.get(STR_INCL_SETTINGS, None)
+            if incl_settings is None:
+                return result
+        incl_locations = incl_settings.get(STR_INCL_SETTING_INCL_LOC, None)
+        if incl_locations is None:
+            return result
         if isinstance(incl_locations, collections.Sequence):
             for loc in incl_locations:
                 path = loc.get(STR_INCL_SETTING_IL_PATH, None)
