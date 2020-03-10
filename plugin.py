@@ -52,10 +52,14 @@ class IncludeAutoComplete(sublime_plugin.EventListener):
     def get_include_locations_from_project_data(self):
         result = []
         project_data = sublime.active_window().project_data()
+        if project_data is None:
+            return result
         if project_data:
             incl_settings = project_data.get(STR_INCL_SETTINGS, None)
             if incl_settings is None:
                 return result
+        if incl_settings is None:
+            return result
         incl_locations = incl_settings.get(STR_INCL_SETTING_INCL_LOC, None)
         if incl_locations is None:
             return result
